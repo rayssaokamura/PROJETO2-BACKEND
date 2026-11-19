@@ -16,11 +16,6 @@ const FORMULARIO_VAZIO = {
   parcelas: '1',
 };
 
-function lerLocal(chave, padrao) {
-  const salvo = localStorage.getItem(chave);
-  return salvo ? JSON.parse(salvo) : padrao;
-}
-
 function adicionarMes(data, quantidade) {
   return new Date(data.getFullYear(), data.getMonth() + quantidade, 1);
 }
@@ -72,8 +67,8 @@ function nomeMes(mes) {
 
 export default function Planejamento() {
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-  const identificadorUsuario = encodeURIComponent(usuario.id || usuario.email || 'local');
-  const chaveLancamentos = `financas:lancamentos:${identificadorUsuario}`;
+  const identificadorCru = usuario.id || usuario.email || 'local';
+  const identificadorUsuario = encodeURIComponent(identificadorCru);
   const chaveOrcamento = `financas:orcamentos:${identificadorUsuario}`;
   const [categorias, setCategorias] = useState([]);
   const [fontes, setFontes] = useState([]);
@@ -87,22 +82,63 @@ export default function Planejamento() {
 
   useEffect(() => {
     let ativo = true;
-    Promise.all([api('/categorias'), api('/fontes-destinos')])
-      .then(([listaCategorias, listaFontes]) => {
+    Promise.all([api('/categorias'), api('/fontes-destinos'), api('/lancamentos')])
+      .then(async ([listaCategorias, listaFontes, listaLancamentos]) => {
         if (!ativo) return;
         setCategorias(listaCategorias);
         setFontes(listaFontes);
+        setLancamentos(listaLancamentos);
+        setProntoParaSalvar(true);
+
+        const chavesLegadas = [
+          `financas:lancamentos:${identificadorCru}`,
+          `financas:lancamentos:${identificadorUsuario}`,
+        ];
+        for (const chave of new Set(chavesLegadas)) {
+          let pendentes;
+          try {
+            pendentes = JSON.parse(localStorage.getItem(chave) || '[]');
+            if (!Array.isArray(pendentes)) throw new Error('Formato inválido.');
+          } catch {
+            setErroLocal('Há lançamentos antigos neste navegador que não puderam ser importados automaticamente.');
+            continue;
+          }
+
+          while (pendentes.length && ativo) {
+            const antigo = pendentes[0];
+            try {
+              const importado = await api('/lancamentos', {
+                method: 'POST',
+                body: {
+                  tipo: antigo.tipo,
+                  descricao: antigo.descricao,
+                  valor: Number(antigo.valor),
+                  data: antigo.data,
+                  categoriaId: Number(antigo.categoriaId),
+                  fonteDestinoId: Number(antigo.fonteDestinoId),
+                  parcelas: Number(antigo.parcelas) || 1,
+                },
+              });
+              pendentes = pendentes.slice(1);
+              if (pendentes.length) localStorage.setItem(chave, JSON.stringify(pendentes));
+              else localStorage.removeItem(chave);
+              setLancamentos((atuais) => [importado, ...atuais]);
+            } catch (e) {
+              setErroLocal(`Não foi possível importar ${pendentes.length} lançamento(s) antigo(s): ${e.mensagem || 'verifique as categorias e contas vinculadas.'}`);
+              break;
+            }
+          }
+        }
       })
       .catch((e) => {
         if (ativo) setErro(e.mensagem || 'Não foi possível carregar categorias e contas.');
       });
 
     try {
-      setLancamentos(lerLocal(chaveLancamentos, []));
-      setOrcamentos(lerLocal(chaveOrcamento, {}));
-      setProntoParaSalvar(true);
+      const salvo = localStorage.getItem(chaveOrcamento);
+      setOrcamentos(salvo ? JSON.parse(salvo) : {});
     } catch {
-      setErroLocal('Não foi possível ler os dados salvos neste navegador. Seus lançamentos locais não foram alterados.');
+      setErroLocal('Não foi possível ler as metas salvas neste navegador.');
     }
 
     return () => { ativo = false; };
@@ -177,7 +213,7 @@ export default function Planejamento() {
     setErro('');
   };
 
-  const salvarLancamento = (evento) => {
+  const salvarLancamento = async (evento) => {
     evento.preventDefault();
     setErro('');
     if (!form.descricao.trim() || !form.valor || Number(form.valor) <= 0 || !form.data || !form.categoriaId || !form.fonteDestinoId) {
@@ -193,37 +229,37 @@ export default function Planejamento() {
       return;
     }
 
-    const novo = {
-      id: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`,
-      ...form,
-      descricao: form.descricao.trim(),
-      valor: Number(form.valor),
-      parcelas: form.tipo === 'saida' ? parcelasSelecionadas : 1,
-    };
-    const atualizados = [novo, ...lancamentos];
     try {
-      localStorage.setItem(chaveLancamentos, JSON.stringify(atualizados));
-      setLancamentos(atualizados);
+      const novo = await api('/lancamentos', {
+        method: 'POST',
+        body: {
+          ...form,
+          descricao: form.descricao.trim(),
+          valor: Number(form.valor),
+          categoriaId: Number(form.categoriaId),
+          fonteDestinoId: Number(form.fonteDestinoId),
+          parcelas: form.tipo === 'saida' ? parcelasSelecionadas : 1,
+        },
+      });
+      setLancamentos((atuais) => [novo, ...atuais]);
       setForm({
         ...FORMULARIO_VAZIO,
         data: dataHoje,
         categoriaId: categoriasDisponiveis[0]?.id || '',
         fonteDestinoId: fontesDisponiveis[0]?.id || '',
       });
-      setErroLocal('');
-    } catch {
-      setErroLocal('Não foi possível salvar neste navegador. Verifique o espaço disponível e tente novamente.');
+    } catch (e) {
+      setErro(e.mensagem || 'Não foi possível salvar o lançamento.');
     }
   };
 
-  const excluirLancamento = (id) => {
-    const atualizados = lancamentos.filter((item) => item.id !== id);
+  const excluirLancamento = async (id) => {
+    if (!confirm('Excluir este lançamento?')) return;
     try {
-      localStorage.setItem(chaveLancamentos, JSON.stringify(atualizados));
-      setLancamentos(atualizados);
-      setErroLocal('');
-    } catch {
-      setErroLocal('Não foi possível atualizar os lançamentos salvos neste navegador.');
+      await api(`/lancamentos/${id}`, { method: 'DELETE' });
+      setLancamentos((atuais) => atuais.filter((item) => item.id !== id));
+    } catch (e) {
+      setErro(e.mensagem || 'Não foi possível excluir o lançamento.');
     }
   };
 
@@ -256,11 +292,6 @@ export default function Planejamento() {
 
       <Alerta msg={erro} />
       <Alerta msg={erroLocal} />
-      {erroLocal && !prontoParaSalvar && (
-        <div className="aviso-local">
-          Não é possível criar lançamentos enquanto os dados locais não puderem ser lidos.
-        </div>
-      )}
 
       <section className="resumo-financeiro" aria-label="Resumo do mês">
         <article className="resumo-card">
@@ -464,7 +495,7 @@ export default function Planejamento() {
           </div>
         )}
       </section>
-      <p className="nota-local">Os lançamentos e metas desta tela ficam salvos neste navegador e neste dispositivo.</p>
+      <p className="nota-local">Seus lançamentos ficam salvos na sua conta. A meta mensal é armazenada neste navegador e neste dispositivo.</p>
     </div>
   );
 }

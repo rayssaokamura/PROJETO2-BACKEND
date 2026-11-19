@@ -120,3 +120,37 @@ a{color:var(--ac)}
   .orcamento-rodape{flex-direction:column;gap:.25rem}
   .tabela-lancamentos{font-size:.78rem}
 }
+.aviso-educativo{display:flex;flex-direction:column;gap:.2rem;margin-bottom:1rem;padding:1rem 1.15rem;border:1px solid color-mix(in srgb,var(--ac) 30%,var(--bd));border-left:4px solid var(--ac);border-radius:10px;background:color-mix(in srgb,var(--ac) 7%,var(--card));font-size:.88rem}
+.aviso-educativo strong{color:var(--ac)}
+.indicadores-saude{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.indicador-card{display:flex;flex-direction:column;align-items:flex-start;gap:.55rem;min-width:0;padding:1.15rem;background:var(--card);border:1px solid var(--bd);border-radius:14px;box-shadow:var(--sh)}
+.indicador-card>strong{font-size:1.7rem;letter-spacing:-.04em}
+.indicador-card>small,.indicador-card>p{margin:0;color:var(--mut);font-size:.79rem;line-height:1.5}
+.projecao-saude,.faturas-saude,.dicas-saude{margin-top:1rem}
+.projecao-saude>.texto-secundario{margin:.75rem 0 0}
+.grafico-rolagem{margin-top:1rem;overflow-x:auto}
+.grafico-linha{display:block;width:100%;min-width:480px;height:auto;overflow:visible}
+.linha-zero{stroke:var(--bd);stroke-dasharray:4 4;stroke-width:1}
+.linha-projecao{fill:none;stroke:var(--ac);stroke-linecap:round;stroke-linejoin:round;stroke-width:3}
+.ponto-projecao{fill:var(--ac);stroke:var(--card);stroke-width:2}
+.ponto-projecao-negativo{fill:var(--red)}
+.rotulos-grafico{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));min-width:480px;margin-top:-.15rem;color:var(--mut);font-size:.72rem;text-align:center;text-transform:capitalize}
+.lista-projecao{margin-top:1rem}
+.linha-projecao-mes{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:.8rem;align-items:center;padding:.7rem 0;border-top:1px solid var(--bd);font-size:.82rem}
+.linha-projecao-mes span:nth-child(2){color:var(--mut)}
+.linha-projecao-mes strong{text-align:right}
+.grade-parcelas{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem}
+.grade-parcelas article{display:flex;flex-direction:column;gap:.4rem;padding:.85rem;background:var(--bg);border:1px solid var(--bd);border-radius:10px}
+.grade-parcelas article>span,.grade-parcelas article>small{color:var(--mut);font-size:.76rem}
+.grade-parcelas article>strong{font-size:1.05rem}
+.dicas-saude h2{margin:.3rem 0 .75rem;font-size:1.12rem}
+.dicas-saude ul{display:flex;flex-direction:column;gap:.6rem;padding-left:1.2rem;line-height:1.55}
+.dicas-saude li::marker{color:var(--ac)}
+.dicas-saude>.texto-secundario{margin-top:1rem;font-size:.78rem}
+.saude-financeira>.nota-local{line-height:1.5}
+@media(max-width:720px){
+  .indicadores-saude{grid-template-columns:1fr}
+  .indicador-card>strong{font-size:1.45rem}
+  .linha-projecao-mes{grid-template-columns:1fr auto}
+  .linha-projecao-mes span:nth-child(2){grid-column:1/-1;grid-row:2}
+}

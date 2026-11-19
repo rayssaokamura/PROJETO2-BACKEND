@@ -6,6 +6,7 @@ import { Login, Cadastro } from './pages/Auth.jsx';
 import Categorias from './pages/Categorias.jsx';
 import Fontes from './pages/Fontes.jsx';
 import Planejamento from './pages/Planejamento.jsx';
+import SaudeFinanceira from './pages/SaudeFinanceira.jsx';
 import './styles.css';
 
 function Privado() {
@@ -19,6 +20,7 @@ function Privado() {
         <strong className="logo">💰 Finanças</strong>
         <nav>
           <NavLink to="/planejamento">Planejamento</NavLink>
+          <NavLink to="/saude-financeira">Saúde financeira</NavLink>
           <NavLink to="/categorias">Categorias</NavLink>
           <NavLink to="/fontes">Contas e cartões</NavLink>
         </nav>
@@ -39,6 +41,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/cadastro" element={<Cadastro />} />
       <Route element={<Privado />}>
         <Route path="/planejamento" element={<Planejamento />} />
+        <Route path="/saude-financeira" element={<SaudeFinanceira />} />
         <Route path="/categorias" element={<Categorias />} />
         <Route path="/fontes" element={<Fontes />} />
       </Route>

@@ -5,6 +5,8 @@ import pool from './config/db.js';
 import authRoutes from './routes/auth.routes.js';
 import categoriasRoutes from './routes/categorias.routes.js';
 import fontesDestinosRoutes from './routes/fontesDestinos.routes.js';
+import lancamentosRoutes from './routes/lancamentos.routes.js';
+import saudeFinanceiraRoutes from './routes/saudeFinanceira.routes.js';
 import { tratarErros } from './middlewares/erro.middleware.js';
 
 dotenv.config();
@@ -29,6 +31,8 @@ app.get('/ping', async (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/categorias', categoriasRoutes);
 app.use('/api/fontes-destinos', fontesDestinosRoutes);
+app.use('/api/lancamentos', lancamentosRoutes);
+app.use('/api/saude-financeira', saudeFinanceiraRoutes);
 
 // Middleware centralizado de erros (sempre após as rotas)
 app.use(tratarErros);

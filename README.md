@@ -39,13 +39,19 @@ Também usados: `pg`, `cors`, `dotenv`, `express-rate-limit` (limite de tentativ
 | Login com JWT e rota `/me` | ✅ | ✅ |
 | Categorias (CRUD) | ✅ | ✅ |
 | Fontes/destinos: renda, conta e cartão de crédito (CRUD) | ✅ | ✅ |
-| Lançamentos de entrada e saída (com parcelamento) | ⏳ só tabela | ✅ local no navegador |
+| Lançamentos de entrada e saída (com parcelamento) | ✅ | ✅ Planejamento |
 | Relatório: gastos por categoria | ⏳ | ✅ Planejamento |
 | Relatório: movimentação por fonte/destino | ⏳ | ⏳ |
-| Previsão de faturas dos cartões | ⏳ | ✅ Planejamento |
-| Extra: saúde financeira | ⏳ | ⏳ |
+| Previsão de faturas dos cartões | ✅ cálculo a partir dos lançamentos | ✅ Planejamento |
+| Extra: saúde financeira | ✅ indicadores em `/api/saude-financeira` | ✅ Saúde financeira |
 
-O planejamento mensal salva lançamentos e metas no armazenamento local do navegador, separados por usuário e dispositivo. A persistência desses lançamentos na API e no PostgreSQL ainda está pendente.
+Os lançamentos são persistidos no PostgreSQL; as metas mensais do planejamento ficam no armazenamento local do navegador. Na primeira abertura do planejamento, lançamentos locais de uma versão anterior são importados para a conta quando suas categorias e contas ainda existem.
+
+### Indicadores de saúde financeira
+
+Os cálculos são feitos pelo backend com os lançamentos do usuário autenticado. A taxa de poupança usa os três meses completos anteriores: `(entradas − despesas) ÷ entradas`. O comprometimento de cartões compara as faturas previstas nos três meses a partir do mês atual com a renda mensal média dos três meses completos anteriores. As parcelas registradas são projetadas para os próximos seis meses.
+
+A projeção mensal parte do saldo médio histórico e substitui a média histórica de despesas no cartão pelas parcelas já registradas. Ela não estima compras futuras que ainda não foram lançadas. As dicas usam como referências educativas uma taxa de poupança de 10% e um alerta quando as faturas superam 30% da renda média; esses valores não são metas universais nem recomendação financeira profissional. A página exibe esse aviso ao usuário.
 
 ## Modelo de dados
 
@@ -72,6 +78,7 @@ cd backend
 cp .env.example.txt .env   # edite DATABASE_URL (usuário/senha) e JWT_SECRET
 npm install
 npm run dev                # http://localhost:3000  (teste: /ping)
+npm test                   # testes de fechamento, vencimento e parcelamento
 ```
 
 ### 3. Front-end
@@ -98,6 +105,9 @@ Todas as rotas, exceto cadastro e login, exigem `Authorization: Bearer <token>`.
 | PUT / DELETE | `/api/categorias/:id` | Edita / exclui categoria |
 | GET / POST | `/api/fontes-destinos` | Lista / cria fonte ou destino |
 | PUT / DELETE | `/api/fontes-destinos/:id` | Edita / exclui |
+| GET / POST | `/api/lancamentos` | Lista / cria lançamento |
+| DELETE | `/api/lancamentos/:id` | Exclui lançamento |
+| GET | `/api/saude-financeira` | Indicadores e projeções calculados no backend |
 
 Erros de validação retornam `{ "erro": "...", "campos": { "campo": "mensagem" } }`.
 
