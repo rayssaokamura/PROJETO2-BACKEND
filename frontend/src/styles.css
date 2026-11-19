@@ -42,3 +42,81 @@ a{color:var(--ac)}
 .item .acoes{margin-top:.75rem}
 .selo{align-self:flex-start;font-size:.72rem;padding:.15rem .5rem;border-radius:99px;background:var(--bg);color:var(--mut);border:1px solid var(--bd)}
 .detalhe{color:var(--mut);margin:.25rem 0 0;font-size:.9rem;line-height:1.5}
+.planejamento{--acento:#178b67;max-width:1120px;margin:0 auto}
+.painel-cabecalho{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;margin:0 0 1.5rem}
+.painel-cabecalho h1{font-size:clamp(1.7rem,3vw,2.25rem);letter-spacing:-.04em;margin:.25rem 0}
+.painel-cabecalho p,.texto-secundario{color:var(--mut);margin:0}
+.sobretitulo{color:var(--ac);font-size:.68rem;letter-spacing:.12em;font-weight:750}
+.seletor-mes{display:flex;flex-direction:column;gap:.3rem;color:var(--mut);font-size:.8rem;font-weight:600}
+.seletor-mes input{min-width:180px;background:var(--card)}
+.resumo-financeiro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-bottom:1rem}
+.resumo-card{display:flex;flex-direction:column;gap:.45rem;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:1.2rem;box-shadow:var(--sh)}
+.resumo-card>span,.resumo-card small{color:var(--mut);font-size:.82rem}
+.resumo-card strong{font-size:1.55rem;letter-spacing:-.035em}
+.valor-entrada{color:var(--in)}
+.resumo-negativo strong,.texto-alerta{color:var(--red)}
+.orcamento-card{padding:1.3rem 1.4rem}
+.orcamento-topo,.secao-titulo{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.orcamento-topo h2,.secao-titulo h2,.formulario-lancamento h2,.categorias-gastos h2{margin:.25rem 0 .85rem;font-size:1.12rem}
+.orcamento-form{display:flex;align-items:flex-end;gap:.65rem}
+.orcamento-form .campo{min-width:180px;margin:0}
+.orcamento-form .btn{white-space:nowrap}
+.barra-progresso{height:8px;overflow:hidden;border-radius:99px;background:var(--bg)}
+.barra-progresso span{display:block;height:100%;border-radius:inherit;background:var(--ac);transition:width .2s ease}
+.barra-progresso span.barra-estourada{background:var(--red)}
+.orcamento-rodape{display:flex;justify-content:space-between;gap:1rem;margin-top:.6rem;color:var(--mut);font-size:.82rem}
+.orcamento-rodape strong{color:var(--ac)}
+.secao-planejamento{margin-top:1.8rem}
+.secao-titulo{margin-bottom:.8rem}
+.secao-titulo h2{margin-bottom:0}
+.secao-titulo>a{font-size:.85rem;font-weight:600;text-decoration:none}
+.grade-faturas{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.8rem}
+.fatura-card{display:flex;gap:.9rem;padding:1rem;background:var(--card);border:1px solid var(--bd);border-radius:12px;box-shadow:var(--sh)}
+.fatura-icone{display:grid;place-items:center;flex:0 0 40px;height:40px;border-radius:12px;background:color-mix(in srgb,var(--ac) 12%,transparent);color:var(--ac);font-size:1.2rem}
+.fatura-info{display:flex;flex:1;flex-direction:column;gap:.35rem;min-width:0}
+.fatura-info h3{margin:0;font-size:.98rem}
+.fatura-info>strong{font-size:1.35rem}
+.fatura-info small,.texto-secundario{font-size:.8rem;line-height:1.5}
+.barra-fatura{height:5px;margin-top:.25rem}
+.estado-vazio{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55rem;min-height:145px;text-align:center;color:var(--mut)}
+.estado-vazio p{margin:0}
+.estado-vazio .btn{margin-top:.25rem;text-decoration:none}
+.grade-planejamento{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(270px,.75fr);gap:1rem;margin-top:1.8rem}
+.formulario-lancamento,.categorias-gastos{margin:0}
+.formulario-lancamento form{display:flex;flex-direction:column;gap:.75rem}
+.formulario-lancamento .linha{align-items:flex-start}
+.formulario-lancamento .linha .campo{min-width:0}
+.formulario-lancamento .campo{min-width:0}
+.formulario-lancamento .btn{align-self:flex-start}
+.lista-categorias{list-style:none;padding:0;margin:1.2rem 0 0;display:flex;flex-direction:column;gap:1.1rem}
+.lista-categorias li{display:flex;flex-direction:column;gap:.5rem}
+.categoria-linha{display:flex;justify-content:space-between;gap:.7rem;font-size:.86rem}
+.categoria-linha strong{white-space:nowrap}
+.lancamentos-mes{margin-top:1.8rem}
+.contador-lancamentos{padding:.3rem .6rem;border-radius:99px;background:var(--bg);color:var(--mut);font-size:.78rem}
+.tabela-rolagem{overflow-x:auto}
+.tabela-lancamentos{width:100%;border-collapse:collapse;text-align:left;font-size:.84rem}
+.tabela-lancamentos th{padding:.75rem .6rem;color:var(--mut);font-size:.73rem;font-weight:600;white-space:nowrap}
+.tabela-lancamentos td{padding:.8rem .6rem;border-top:1px solid var(--bd);white-space:nowrap}
+.tabela-lancamentos td:first-child{white-space:normal;min-width:140px}
+.tabela-lancamentos td:nth-child(5){font-weight:650}
+.sub-lancamento{display:block;margin-top:.2rem;color:var(--mut);font-size:.72rem}
+.nota-local{margin:1rem 0 0;text-align:center;color:var(--mut);font-size:.75rem}
+.aviso-local{padding:.7rem .85rem;background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red);border-radius:8px;margin-bottom:.75rem}
+@media(max-width:720px){
+  .painel-cabecalho{align-items:flex-start;flex-direction:column}
+  .seletor-mes,.seletor-mes input{width:100%}
+  .resumo-financeiro{grid-template-columns:1fr}
+  .resumo-card{padding:1rem}
+  .resumo-card strong{font-size:1.3rem}
+  .orcamento-topo{align-items:stretch;flex-direction:column}
+  .orcamento-form{align-items:stretch}
+  .orcamento-form .campo{flex:1}
+  .grade-planejamento{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .orcamento-form{flex-direction:column}
+  .orcamento-form .campo{width:100%}
+  .orcamento-rodape{flex-direction:column;gap:.25rem}
+  .tabela-lancamentos{font-size:.78rem}
+}

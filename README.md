@@ -39,11 +39,13 @@ Também usados: `pg`, `cors`, `dotenv`, `express-rate-limit` (limite de tentativ
 | Login com JWT e rota `/me` | ✅ | ✅ |
 | Categorias (CRUD) | ✅ | ✅ |
 | Fontes/destinos: renda, conta e cartão de crédito (CRUD) | ✅ | ✅ |
-| Lançamentos de entrada e saída (com parcelamento) | ⏳ só tabela | ⏳ |
-| Relatório: gastos por categoria | ⏳ | ⏳ |
+| Lançamentos de entrada e saída (com parcelamento) | ⏳ só tabela | ✅ local no navegador |
+| Relatório: gastos por categoria | ⏳ | ✅ Planejamento |
 | Relatório: movimentação por fonte/destino | ⏳ | ⏳ |
-| Previsão de faturas dos cartões | ⏳ | ⏳ |
+| Previsão de faturas dos cartões | ⏳ | ✅ Planejamento |
 | Extra: saúde financeira | ⏳ | ⏳ |
+
+O planejamento mensal salva lançamentos e metas no armazenamento local do navegador, separados por usuário e dispositivo. A persistência desses lançamentos na API e no PostgreSQL ainda está pendente.
 
 ## Modelo de dados
 

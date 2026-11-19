@@ -20,7 +20,7 @@ export function Login() {
     try {
       const { token, usuario } = await api('/auth/login', { method: 'POST', body: f.v });
       setSessao(token, usuario);
-      nav('/categorias');
+      nav('/planejamento');
     } catch (err) { f.setErro(err); }
     f.setCarregando(false);
   };

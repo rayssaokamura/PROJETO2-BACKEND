@@ -5,6 +5,7 @@ import { getToken, limparSessao } from './api.js';
 import { Login, Cadastro } from './pages/Auth.jsx';
 import Categorias from './pages/Categorias.jsx';
 import Fontes from './pages/Fontes.jsx';
+import Planejamento from './pages/Planejamento.jsx';
 import './styles.css';
 
 function Privado() {
@@ -17,6 +18,7 @@ function Privado() {
       <header className="topo">
         <strong className="logo">💰 Finanças</strong>
         <nav>
+          <NavLink to="/planejamento">Planejamento</NavLink>
           <NavLink to="/categorias">Categorias</NavLink>
           <NavLink to="/fontes">Contas e cartões</NavLink>
         </nav>
@@ -36,10 +38,11 @@ createRoot(document.getElementById('root')).render(
       <Route path="/login" element={<Login />} />
       <Route path="/cadastro" element={<Cadastro />} />
       <Route element={<Privado />}>
+        <Route path="/planejamento" element={<Planejamento />} />
         <Route path="/categorias" element={<Categorias />} />
         <Route path="/fontes" element={<Fontes />} />
       </Route>
-      <Route path="*" element={<Navigate to="/categorias" replace />} />
+      <Route path="*" element={<Navigate to="/planejamento" replace />} />
     </Routes>
   </BrowserRouter>
 );
